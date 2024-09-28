@@ -1,1 +1,1 @@
-# GT_Campus_Nav_Drone
+# Georgia Institute of Technology Fall 2024 Capstone

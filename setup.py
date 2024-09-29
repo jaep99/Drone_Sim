@@ -21,5 +21,5 @@ setup(
     author='Hyeonjae Park',      
     author_email='hyeonjae.park990813@gmail.com',  
     description='Campus navigation drone project using ArduPilot and MAVProxy.',
-    url='https://github.com/jaep99/GT_Campus_Nav_Drone',  # 프로젝트 URL
+    url='https://github.com/jaep99/GT_Campus_Nav_Drone',
 )

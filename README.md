@@ -6,3 +6,9 @@ Highly recommend to use conda environment to control dependencies
 
 This project is tested/built on linux operating system; ubuntu 20.04.5 LTS.
 
+## Installation
+
+    $ pip install dronekit
+    $ pip install pymavlink
+    $ pip install MAVProxy
+

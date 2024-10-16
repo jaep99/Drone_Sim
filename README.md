@@ -12,8 +12,27 @@ This project is tested/built on linux operating system; ubuntu 20.04.5 LTS.
     $ pip install pymavlink
     $ pip install MAVProxy
 
+    ## Install GTK+3 library
+    $ sudo apt update
+    $ sudo apt install -y \
+        libgtk-3-dev \
+        libjpeg-dev \
+        libtiff-dev \
+        libgl1-mesa-dev \
+        libglu1-mesa-dev \
+        freeglut3-dev \
+        libnotify-dev \
+        libsdl2-2.0-0 \
+        libsdl2-dev
+
+    $ pip install matplotlib
     $ pip install wxPython
 
+Test MAVProxy
+
+    $ mavproxy.py --console --map
+
+If the map and console shows up, MAVProxy is successfully installed
 
 ## Ardupilot Installation
 Ardupilot repository clone & update

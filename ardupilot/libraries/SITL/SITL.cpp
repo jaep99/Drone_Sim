@@ -86,7 +86,7 @@ const AP_Param::GroupInfo SIM::var_info[] = {
     // @User: Advanced
     AP_GROUPINFO("WIND_SPD",       9, SIM,  wind_speed,  0),
     // @Param: WIND_DIR
-    // @DisplayName: Simulated Wind direction
+    // @DisplayName: Direction simulated wind is coming from
     // @Description: Allows you to set wind direction (true deg) in sim
     // @Units: deg
     // @User: Advanced
@@ -659,45 +659,6 @@ const AP_Param::GroupInfo SIM::var_info3[] = {
     // @Units: us
     // @User: Advanced
     AP_GROUPINFO("TIME_JITTER",  37, SIM,  loop_time_jitter_us, 0),
-
-    // user settable parameters for the 1st barometer
-    // @Param: BARO_RND
-    // @DisplayName: Baro Noise
-    // @Description: Amount of (evenly-distributed) noise injected into the 1st baro
-    // @Units: m
-    // @User: Advanced
-
-    // @Param: BARO_GLITCH
-    // @DisplayName: Baro Glitch
-    // @Description: Glitch for 1st baro
-    // @Units: m
-    // @User: Advanced
-
-    // user settable parameters for the 2nd barometer
-    // @Param: BAR2_RND
-    // @DisplayName: Baro2 Noise
-    // @Description: Amount of (evenly-distributed) noise injected into the 2nd baro
-    // @Units: m
-    // @User: Advanced
-
-    // @Param: BAR2_GLITCH
-    // @DisplayName: Baro2 Glitch
-    // @Description: Glitch for 2nd baro
-    // @Units: m
-    // @User: Advanced
-
-    // user settable parameters for the 3rd barometer
-    // @Param: BAR3_RND
-    // @DisplayName: Baro3 Noise
-    // @Description: Amount of (evenly-distributed) noise injected into the 3rd baro
-    // @Units: m
-    // @User: Advanced
-
-    // @Param: BAR3_GLITCH
-    // @DisplayName: Baro3 Glitch
-    // @Description: Glitch for 2nd baro
-    // @Units: m
-    // @User: Advanced
 
     // @Param: ESC_TELEM
     // @DisplayName: Simulated ESC Telemetry

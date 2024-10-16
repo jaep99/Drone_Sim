@@ -3254,6 +3254,9 @@ class TestSuite(ABC):
     def default_parameter_list(self):
         ret = {
             'LOG_DISARMED': 1,
+            # also lower logging rate to reduce log sizes
+            'LOG_DARM_RATEMAX': 5,
+            'LOG_FILE_RATEMAX': 10,
         }
         if self.force_ahrs_type is not None:
             if self.force_ahrs_type == 2:
@@ -6410,8 +6413,8 @@ class TestSuite(ABC):
                 self.remove_message_hook(hook)
         for script in dead.installed_scripts:
             self.remove_installed_script(script)
-        for (message_id, interval_us) in dead.overridden_message_rates.items():
-            self.set_message_interval(message_id, interval_us)
+        for (message_id, rate_hz) in dead.overridden_message_rates.items():
+            self.set_message_rate_hz(message_id, rate_hz)
         for module in dead.installed_modules:
             print("Removing module (%s)" % module)
             self.remove_installed_modules(module)
@@ -7305,13 +7308,13 @@ class TestSuite(ABC):
 
         self.wait_and_maintain(
             value_name="Altitude",
-            target=altitude_min,
+            target=(altitude_min + altitude_max)*0.5,
             current_value_getter=lambda: self.get_altitude(
                 relative=relative,
                 timeout=timeout,
                 altitude_source=altitude_source,
             ),
-            accuracy=(altitude_max - altitude_min),
+            accuracy=(altitude_max - altitude_min)*0.5,
             validator=lambda value2, target2: validator(value2, target2),
             timeout=timeout,
             **kwargs
@@ -7436,8 +7439,8 @@ class TestSuite(ABC):
             )
         return self.wait_and_maintain_range(
             value_name,
-            minimum=target - accuracy/2,
-            maximum=target + accuracy/2,
+            minimum=target - accuracy,
+            maximum=target + accuracy,
             current_value_getter=current_value_getter,
             validator=validator,
             timeout=timeout,
@@ -7959,6 +7962,28 @@ class TestSuite(ABC):
             if comparator(m_value, value):
                 return m_value
 
+    def wait_servo_channel_in_range(self, channel, v_min, v_max, timeout=2):
+        """wait for channel value to be within acceptable range"""
+        channel_field = "servo%u_raw" % channel
+        tstart = self.get_sim_time()
+        while True:
+            remaining = timeout - (self.get_sim_time_cached() - tstart)
+            if remaining <= 0:
+                raise NotAchievedException("Channel value condition not met")
+            m = self.mav.recv_match(type='SERVO_OUTPUT_RAW',
+                                    blocking=True,
+                                    timeout=remaining)
+            if m is None:
+                continue
+            m_value = getattr(m, channel_field, None)
+            if m_value is None:
+                raise ValueError("message (%s) has no field %s" %
+                                 (str(m), channel_field))
+            self.progress("want %u <= SERVO_OUTPUT_RAW.%s <= %u, got value = %u" %
+                          (v_min, channel_field, v_max, m_value))
+            if (v_min <= m_value) and (m_value <= v_max):
+                return m_value
+
     def assert_servo_channel_value(self, channel, value, comparator=operator.eq):
         """assert channel value (default condition is equality)"""
         channel_field = "servo%u_raw" % channel
@@ -7971,6 +7996,20 @@ class TestSuite(ABC):
         self.progress("assert SERVO_OUTPUT_RAW.%s=%u %s %u" %
                       (channel_field, m_value, opstring, value))
         if comparator(m_value, value):
+            return m_value
+        raise NotAchievedException("Wrong value")
+
+    def assert_servo_channel_range(self, channel, value_min, value_max):
+        """assert channel value is within the range [value_min, value_max]"""
+        channel_field = "servo%u_raw" % channel
+        m = self.assert_receive_message('SERVO_OUTPUT_RAW', timeout=1)
+        m_value = getattr(m, channel_field, None)
+        if m_value is None:
+            raise ValueError("message (%s) has no field %s" %
+                             (str(m), channel_field))
+        self.progress("assert SERVO_OUTPUT_RAW.%s=%u in [%u, %u]" %
+                      (channel_field, m_value, value_min, value_max))
+        if m_value >= value_min and m_value <= value_max:
             return m_value
         raise NotAchievedException("Wrong value")
 
@@ -10862,6 +10901,14 @@ Also, ignores heartbeats not from our target system'''
         self.context_set_message_rate_hz('VFR_HUD', original_rate*2, run_cmd=self.run_cmd_int)
         if abs(original_rate*2 - round(self.get_message_rate_hz("VFR_HUD", run_cmd=self.run_cmd_int))) > 1:
             raise NotAchievedException("Did not set rate")
+
+        # Try setting a rate well beyond SCHED_LOOP_RATE
+        self.run_cmd(
+            mavutil.mavlink.MAV_CMD_SET_MESSAGE_INTERVAL,
+            p1=mavutil.mavlink.MAVLINK_MSG_ID_VFR_HUD,
+            p2=self.rate_to_interval_us(800),
+            want_result=mavutil.mavlink.MAV_RESULT_DENIED,
+        )
 
         self.start_subtest("Use REQUEST_MESSAGE via COMMAND_INT")
         # 148 is AUTOPILOT_VERSION:

@@ -28,13 +28,13 @@ enum class LogEvent : uint8_t {
     AUTO_ARMED = 15,
     LAND_COMPLETE_MAYBE = 17,
     LAND_COMPLETE = 18,
-    NOT_LANDED = 28,
     LOST_GPS = 19,
     FLIP_START = 21,
     FLIP_END = 22,
     SET_HOME = 25,
     SET_SIMPLE_ON = 26,
     SET_SIMPLE_OFF = 27,
+    NOT_LANDED = 28,
     SET_SUPERSIMPLE_ON = 29,
     AUTOTUNE_INITIALISED = 30,
     AUTOTUNE_OFF = 31,
@@ -273,8 +273,15 @@ public:
                        uint8_t source_component,
                        MAV_RESULT result,
                        bool was_command_long=false);
+    void Write_MISE(const AP_Mission &mission, const AP_Mission::Mission_Command &cmd) {
+        Write_Mission_Cmd(mission, cmd, LOG_MISE_MSG);
+    }
+    void Write_CMD(const AP_Mission &mission, const AP_Mission::Mission_Command &cmd) {
+        Write_Mission_Cmd(mission, cmd, LOG_CMD_MSG);
+    }
     void Write_Mission_Cmd(const AP_Mission &mission,
-                               const AP_Mission::Mission_Command &cmd);
+                           const AP_Mission::Mission_Command &cmd,
+                           LogMessages id);
     void Write_RallyPoint(uint8_t total,
                           uint8_t sequence,
                           const class RallyLocation &rally_point);

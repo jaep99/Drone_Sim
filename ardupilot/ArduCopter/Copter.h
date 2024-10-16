@@ -266,9 +266,9 @@ private:
         //   measured ground or ceiling level measured using the range finder.
         void update_surface_offset();
 
-        // get/set target altitude (in cm) above ground
-        bool get_target_alt_cm(float &target_alt_cm) const;
-        void set_target_alt_cm(float target_alt_cm);
+        // target has already been set by terrain following so do not initalise again
+        // this should be called by flight modes when switching from terrain following to surface tracking (e.g. ZigZag)
+        void external_init();
 
         // get target and actual distances (in m) for logging purposes
         bool get_target_dist_for_logging(float &target_dist) const;
@@ -390,7 +390,6 @@ private:
     // This is the state of the flight control system
     // There are multiple states defined such as STABILIZE, ACRO,
     Mode *flightmode;
-    Mode::Number prev_control_mode;
 
     RCMapper rcmap;
 

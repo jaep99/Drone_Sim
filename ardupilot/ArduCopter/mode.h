@@ -182,12 +182,6 @@ public:
     // altitude fence
     float get_avoidance_adjusted_climbrate(float target_rate);
 
-    const Vector3f& get_vel_desired_cms() {
-        // note that position control isn't used in every mode, so
-        // this may return bogus data:
-        return pos_control->get_vel_desired_cms();
-    }
-
     // send output to the motors, can be overridden by subclasses
     virtual void output_to_motors();
 
@@ -340,6 +334,8 @@ public:
                            bool relative_angle);
 
         void set_yaw_angle_rate(float yaw_angle_d, float yaw_rate_ds);
+
+        void set_yaw_angle_offset(const float yaw_angle_offset_d);
 
         bool reached_fixed_yaw_target();
 
@@ -645,11 +641,16 @@ private:
     void loiter_to_alt_run();
     void nav_attitude_time_run();
 
+    // return the Location portion of a command.  If the command's lat and lon and/or alt are zero the default_loc's lat,lon and/or alt are returned instead
     Location loc_from_cmd(const AP_Mission::Mission_Command& cmd, const Location& default_loc) const;
 
     SubMode _mode = SubMode::TAKEOFF;   // controls which auto controller is run
 
     bool shift_alt_to_current_alt(Location& target_loc) const;
+
+    // subtract position controller offsets from target location
+    // should be used when the location will be used as a target for the position controller
+    void subtract_pos_offsets(Location& target_loc) const;
 
     void do_takeoff(const AP_Mission::Mission_Command& cmd);
     void do_nav_wp(const AP_Mission::Mission_Command& cmd);
@@ -2014,18 +2015,14 @@ private:
     int32_t _pitch_target;          // Target pitch attitude to pass to attitude controller
     uint32_t _entry_time_start_ms;  // Time remaining until entry phase moves on to glide phase
     float _hs_decay;                // The head accerleration during the entry phase
-    float _bail_time;               // Timer for exiting the bail out phase (s)
-    uint32_t _bail_time_start_ms;   // Time at start of bail out
-    float _target_climb_rate_adjust;// Target vertical acceleration used during bail out phase
-    float _target_pitch_adjust;     // Target pitch rate used during bail out phase
 
     enum class Autorotation_Phase {
         ENTRY,
         SS_GLIDE,
         FLARE,
         TOUCH_DOWN,
-        BAIL_OUT } phase_switch;
-        
+        LANDED } phase_switch;
+
     enum class Navigation_Decision {
         USER_CONTROL_STABILISED,
         STRAIGHT_AHEAD,
@@ -2038,10 +2035,10 @@ private:
             bool ss_glide_initial          : 1;
             bool flare_initial             : 1;
             bool touch_down_initial        : 1;
+            bool landed_initial            : 1;
             bool straight_ahead_initial    : 1;
             bool level_initial             : 1;
             bool break_initial             : 1;
-            bool bail_out_initial          : 1;
             bool bad_rpm                   : 1;
     } _flags;
 

@@ -54,6 +54,24 @@ STIL build
     ## Build may take a while
     $ ./waf build
 
+## QGroundControl Installation
+Before installing
+
+    $ sudo usermod -a -G dialout $USER
+    $ sudo apt-get remove modemmanager -y
+    $ sudo apt install gstreamer1.0-plugins-bad gstreamer1.0-libav gstreamer1.0-gl -y
+    $ sudo apt install libfuse2 -y
+    $ sudo apt install libxcb-xinerama0 libxkbcommon-x11-0 libxcb-cursor-dev -y
+
+Logout and login to enable the changes
+
+Download QGroundControl.AppImage from the following link
+<br>https://docs.qgroundcontrol.com/master/en/qgc-user-guide/getting_started/download_and_install.html
+
+Grant permission and run
+
+    $ chmod +x ./QGroundControl.AppImage
+    $ ./QGroundControl.AppImage  (or double click)
 
 ## ROS 2 Humble with Gazebo 11 Installation
 [ROS 2 Installation]

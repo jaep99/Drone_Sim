@@ -73,7 +73,7 @@ Grant permission and run
     $ chmod +x ./QGroundControl.AppImage
     $ ./QGroundControl.AppImage  (or double click)
 
-## ROS 2 Iron with Gazebo Garden Installation
+## ROS 2 Iron with Gazebo Harmonic Installation
 [ROS 2 Installation]
 <br>Please follow the instruction provided 
 <br>https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debs.html
@@ -92,9 +92,10 @@ Install Packages for ROS 2 Gazebo
     $ sudo apt install ros-humble-gazebo-ros-pkgs
     $ sudo apt install ros-humble-gazebo-ros2-control ros-humble-gazebo-ros2-control-demos ros-humble-gazebo-plugins
 
-Verification
-
-    $ ros2 launch gazebo_ros gazebo.launch.py
+    # dependencies install
+    $ sudo apt update
+    $ sudo apt install libgz-sim7-dev rapidjson-dev
+    $ sudo apt install libopencv-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev gstreamer1.0-plugins-bad gstreamer1.0-libav gstreamer1.0-gl
 
 ## Ardupilot Gazebo plug-in Installation
 

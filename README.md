@@ -73,12 +73,12 @@ Grant permission and run
     $ chmod +x ./QGroundControl.AppImage
     $ ./QGroundControl.AppImage  (or double click)
 
-## ROS 2 Humble with Gazebo 11 Installation
+## ROS 2 Iron with Gazebo Garden Installation
 [ROS 2 Installation]
 <br>Please follow the instruction provided 
 <br>https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debs.html
 
-[Gazebo 11 Installation]
+[Gazebo Installation]
 <br>Install
 
     $ pip curl -sSL http://get.gazebosim.org | sh
@@ -86,7 +86,7 @@ Run
     
     $ gazebo
 
-Install Packages for ROS 2 Gazebo
+Install Packages for ROS 2 Gazebo 
 
     $ sudo apt update
     $ sudo apt install ros-humble-gazebo-ros-pkgs
@@ -96,3 +96,17 @@ Verification
 
     $ ros2 launch gazebo_ros gazebo.launch.py
 
+## Ardupilot Gazebo plug-in Installation
+
+    $ git clone https://github.com/ArduPilot/ardupilot_gazebo.git
+    # cd ardupilot_gazebo
+    # mkdir build
+    $ cd build
+    
+    ## cmake build
+    $ cmake ..
+    $ make
+    $ sudo make install
+
+    
+    

@@ -73,7 +73,7 @@ Grant permission and run
     $ chmod +x ./QGroundControl.AppImage
     $ ./QGroundControl.AppImage  (or double click)
 
-## ROS 2 Iron with Gazebo Harmonic Installation
+## ROS 2 Iron with Gazebo Garden Installation
 [ROS 2 Installation]
 <br>Please follow the instruction provided 
 <br>https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debs.html

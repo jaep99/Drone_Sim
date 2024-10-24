@@ -109,5 +109,7 @@ Install Packages for ROS 2 Gazebo
     make
     sudo make install
 
-    
+(gtnavdrone) hyeonjae@hyeonjae-ubuntu:~/Desktop/Drone_Sim/ardupilot_gazebo$ gz sim -v4 -r --render-engine ogre iris_runway.sdf
+(gtnavdrone) hyeonjae@hyeonjae-ubuntu:~/Desktop/Drone_Sim/ardupilot/ArduCopter$ ../Tools/autotest/sim_vehicle.py -v ArduCopter -f gazebo-iris --model JSON --map --console
+
     

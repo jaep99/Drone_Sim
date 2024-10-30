@@ -6,7 +6,7 @@ Fall 2024 Capstone Design Project
 # Simulation Environment Setup
 Highly recommend to use conda environment to control dependencies
 
-This project is tested/built on linux operating system; ubuntu 20.04.5 LTS.
+This project is tested/built on linux operating system
 
 ## Dependencies Installation
 

@@ -27,6 +27,8 @@ This project is tested/built on linux operating system
         libsdl2-2.0-0 \
         libsdl2-dev
 
+    sudo apt install python-opencv=3.2.0+dfsg-4ubuntu0.1
+
     pip install matplotlib
     pip install wxPython
 
@@ -73,43 +75,47 @@ Grant permission and run
     chmod +x ./QGroundControl.AppImage
     ./QGroundControl.AppImage  (or double click)
 
-## ROS with Gazebo Classic Installation
-[ROS 2 Installation]
-<br>Please follow the instruction provided 
-<br>https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debs.html
-
+## Gazebo 9 Installation
 [Gazebo Installation]
-<br>Install
 
-    pip curl -sSL http://get.gazebosim.org | sh
-Run
-    
-    gazebo
+    sudo apt install gazebo9 libgazebo9-dev
 
-Install Packages for ROS 2 Gazebo 
+<br>[Ardupilio-Gazebo Installation]
 
-    sudo apt update
-    sudo apt install ros-humble-gazebo-ros-pkgs
-    sudo apt install ros-humble-gazebo-ros2-control ros-humble-gazebo-ros2-control-demos ros-humble-gazebo-plugins
-
-    # dependencies install
-    sudo apt update
-    sudo apt install libgz-sim7-dev rapidjson-dev
-    sudo apt install libopencv-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev gstreamer1.0-plugins-bad gstreamer1.0-libav gstreamer1.0-gl
-
-## Ardupilot Gazebo plug-in Installation
-
-    git clone https://github.com/ArduPilot/ardupilot_gazebo.git
-    # cd ardupilot_gazebo
+    git clone https://github.com/dronedojo/ardupilot_gazebo
+    cd ardupilot_gazebo
     mkdir build
     cd build
-    
-    ## cmake build
+    sudo apt install cmake   
     cmake ..
-    make
+    make -j4
     sudo make install
 
-(gtnavdrone) hyeonjae@hyeonjae-ubuntu:~/Desktop/Drone_Sim/ardupilot_gazebo$ gz sim -v4 -r --render-engine ogre iris_runway.sdf
-(gtnavdrone) hyeonjae@hyeonjae-ubuntu:~/Desktop/Drone_Sim/ardupilot/ArduCopter$ ../Tools/autotest/sim_vehicle.py -v ArduCopter -f gazebo-iris --model JSON --map --console
+## ROS Melodic Installation
+
+    sudo sh -c ‘echo “deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main”
+    > /etc/apt/sources.list.d/ros-latest.list’
+    sudo apt-key adv –keyserver ‘hkp://keyserver.ubuntu.com:80’ 
+    –recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+    sudo apt install ros-melodic-desktop-full
+
+Add this to .bashrc:
+
+    source /opt/ros/melodic/setup.bash
+
+<br>Finish installation
+
+    sudo apt install python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential
+    sudo apt install python-rosdep
+    sudo rosdep init
+    rosdep update
+
+## Install Gazebo-Ros
+
+    sudo apt-get install ros-melodic-gazebo-ros-pkgs ros-melodic-gazebo-ros-control
+
+
+
+
 
     
